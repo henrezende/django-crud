@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'crudalunos.students.apps.StudentsConfig',
     'crudalunos.subjects.apps.SubjectsConfig',
+    'drf_yasg',
     'rest_framework'
 ]
 
@@ -112,9 +113,6 @@ REST_FRAMEWORK = {
     # or allow read-only access for unauthenticated users.
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
     'PAGE_SIZE': 10,
-    'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
-    ]
 }
 # Internationalization
 # https://docs.djangoproject.com/en/3.2/topics/i18n/
