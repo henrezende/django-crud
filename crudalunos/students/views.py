@@ -5,16 +5,16 @@ from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi
 from crudalunos.common.utils import create_student_filter
 from .models import Student
-from .serializers import StudentCreateSerializer, StudentSerializer
+from .serializers import StudentCreateOrUpdateSerializer, StudentSerializer
 
 
 class StudentViewSet(viewsets.ModelViewSet):  # pylint: disable=too-many-ancestors
-    """" Students endpoints """
+    """ Students endpoints """
     queryset = Student.objects.all().order_by('id')
 
     def get_serializer_class(self):
-        if self.action == 'create':
-            return StudentCreateSerializer
+        if self.action == 'create' or self.action == 'update':
+            return StudentCreateOrUpdateSerializer
         return StudentSerializer
 
     first_name = openapi.Parameter('first_name', openapi.IN_QUERY,
