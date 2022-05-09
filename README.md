@@ -19,10 +19,6 @@
 
 - Apenas rode o comando `docker-compose run web pylint --rcfile=.pylintrc *` e as alterações necessárias serão apontadas
 
-### Rodando migrations
-
-- Rode `docker-compose run web python manage.py migrate_schemas`
-
 ### Rodando os comandos diretamente dentro do container
 
 - Primeiro entre no bash `docker-compose run web bash`
