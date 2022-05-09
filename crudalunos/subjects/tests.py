@@ -1,11 +1,14 @@
+""" Subject tests """
 import json
+from rest_framework import status
 from django.test import TestCase
 from crudalunos.subjects.serializers import SubjectSerializer
-from rest_framework import status
 from crudalunos.subjects.models import Subject
 
 
 class ListAllSubjectTestCase(TestCase):
+    """ Test of the Subject list methods """
+
     def setUp(self):
         Subject.objects.create(name="Math")
         Subject.objects.create(name="English")
@@ -18,13 +21,14 @@ class ListAllSubjectTestCase(TestCase):
 
 
 class ShowSingleSubjectTestCase(TestCase):
+    """ Test of the Subject show methods """
+
     def setUp(self):
         self.math = Subject.objects.create(name="Math")
 
     def test_show_valid_subject(self):
         """Show a valid subject"""
-        response = self.client.get('/subjects/%i/' %
-                                   self.math.pk, format='json')
+        response = self.client.get(f'/subjects/{self.math.pk}/', format='json')
         subject_obj = Subject.objects.get(id=self.math.pk)
         serializer = SubjectSerializer(subject_obj)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
@@ -37,6 +41,8 @@ class ShowSingleSubjectTestCase(TestCase):
 
 
 class CreateSubjectTestCase(TestCase):
+    """ Test of the Subject create methods """
+
     def setUp(self):
         self.math = Subject.objects.create(name="Math")
         self.english = Subject.objects.create(name="English")
@@ -61,6 +67,8 @@ class CreateSubjectTestCase(TestCase):
 
 
 class UpdateSubjectTestCase(TestCase):
+    """ Test of the Subject update methods """
+
     def setUp(self):
         self.math = Subject.objects.create(name="Math")
 
@@ -70,7 +78,7 @@ class UpdateSubjectTestCase(TestCase):
             "name": "Mathematics"
         }
         response = self.client.patch(
-            '/subjects/%i/' % self.math.pk, data, format='json', content_type='application/json')
+            f'/subjects/{self.math.pk}/', data, format='json', content_type='application/json')
 
         subject_obj = Subject.objects.get(id=self.math.pk)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
@@ -82,18 +90,20 @@ class UpdateSubjectTestCase(TestCase):
             "name": ""
         }
         response = self.client.patch(
-            '/subjects/%i/' % self.math.pk, data, format='json', content_type='application/json')
+            f'/subjects/{self.math.pk}/', data, format='json', content_type='application/json')
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
 
 class DeleteSubjectTestCase(TestCase):
+    """ Test of the Subject delete methods """
+
     def setUp(self):
         self.math = Subject.objects.create(name="Math")
 
     def test_valid_delete_subject(self):
         """Delete a subject with valid data"""
         response = self.client.delete(
-            '/subjects/%i/' % self.math.pk, format='json', content_type='application/json')
+            f'/subjects/{self.math.pk}/', format='json', content_type='application/json')
 
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
 
