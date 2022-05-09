@@ -14,7 +14,7 @@ from .serializers import StudentCreateSerializer, StudentSerializer
 
 class StudentViewSet(viewsets.ModelViewSet):
     """" Students endpoints """
-    queryset = Student.objects.all()
+    queryset = Student.objects.all().order_by('id')
 
     def get_serializer_class(self):
         if self.action == 'create':
