@@ -1,12 +1,15 @@
+""" Students tests """
 import json
 from django.test import TestCase
-from crudalunos.students.serializers import StudentSerializer
 from rest_framework import status
+from crudalunos.students.serializers import StudentSerializer
 from crudalunos.students.models import Student
 from crudalunos.subjects.models import Subject
 
 
 class ListAllStudentTestCase(TestCase):
+    """ Test of the Student list methods, with and without filter """
+
     def setUp(self):
         Student.objects.create(
             first_name="John",
@@ -34,6 +37,8 @@ class ListAllStudentTestCase(TestCase):
 
 
 class ShowSingleStudentTestCase(TestCase):
+    """ Test of the Student show methods """
+
     def setUp(self):
         self.john = Student.objects.create(
             first_name="John",
@@ -43,8 +48,7 @@ class ShowSingleStudentTestCase(TestCase):
 
     def test_show_valid_student(self):
         """Show a valid student"""
-        response = self.client.get('/students/%i/' %
-                                   self.john.pk, format='json')
+        response = self.client.get(f'/students/{self.john.pk}/', format='json')
         student_obj = Student.objects.get(id=self.john.pk)
         serializer = StudentSerializer(student_obj)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
@@ -57,6 +61,8 @@ class ShowSingleStudentTestCase(TestCase):
 
 
 class CreateStudentTestCase(TestCase):
+    """ Test of the Student create methods """
+
     def setUp(self):
         self.math = Subject.objects.create(name="Math")
         self.english = Subject.objects.create(name="English")
@@ -99,6 +105,8 @@ class CreateStudentTestCase(TestCase):
 
 
 class UpdateStudentTestCase(TestCase):
+    """ Test of the Student update methods """
+
     def setUp(self):
         self.john = Student.objects.create(
             first_name="John doe",
@@ -112,7 +120,7 @@ class UpdateStudentTestCase(TestCase):
             "first_name": "John"
         }
         response = self.client.patch(
-            '/students/%i/' % self.john.pk, data, format='json', content_type='application/json')
+            f'/students/{self.john.pk}/', data, format='json', content_type='application/json')
 
         student_obj = Student.objects.get(id=self.john.pk)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
@@ -124,11 +132,13 @@ class UpdateStudentTestCase(TestCase):
             "first_name": ""
         }
         response = self.client.patch(
-            '/students/%i/' % self.john.pk, data, format='json', content_type='application/json')
+            f'/students/{self.john.pk}/', data, format='json', content_type='application/json')
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
 
 class DeleteStudentTestCase(TestCase):
+    """ Test of the Student delete methods """
+
     def setUp(self):
         self.john = Student.objects.create(
             first_name="John doe",
@@ -139,7 +149,7 @@ class DeleteStudentTestCase(TestCase):
     def test_valid_delete_student(self):
         """Delete a student with valid data"""
         response = self.client.delete(
-            '/students/%i/' % self.john.pk, format='json', content_type='application/json')
+            f'/students/{self.john.pk}/', format='json', content_type='application/json')
 
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
 

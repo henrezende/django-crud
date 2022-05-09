@@ -1,8 +1,6 @@
+"""" Student models """
 from django.db import models
-
 from crudalunos.subjects.models import Subject
-
-# Create your models here.
 
 
 class Student(models.Model):
