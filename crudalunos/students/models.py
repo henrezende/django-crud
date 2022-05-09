@@ -11,5 +11,9 @@ class Student(models.Model):
     registration_number = models.CharField(max_length=10)
     subjects = models.ManyToManyField(Subject, blank=True)
 
+    class Meta:
+        """ Subject model meta config """
+        ordering = ['-id']
+
     def __str__(self):
         return self.first_name + " " + self.last_name
