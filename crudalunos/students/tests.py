@@ -72,7 +72,7 @@ class CreateStudentTestCase(TestCase):
         data = {
             "first_name": "Jane",
             "last_name": "Doe",
-            "registration_number": "123456"
+            "registration_number": "123456",
         }
         response = self.client.post(
             '/students/', data, format='json', content_type='application/json')
@@ -113,8 +113,9 @@ class UpdateStudentTestCase(TestCase):
             last_name="Doe",
             registration_number="ABC1234",
         )
+        self.math = Subject.objects.create(name="Math")
 
-    def test_valid_update_student(self):
+    def test_valid_patch_update_student(self):
         """Updates a student with valid data"""
         data = {
             "first_name": "John"
@@ -126,12 +127,52 @@ class UpdateStudentTestCase(TestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(student_obj.first_name, "John")
 
-    def test_invalid_update_student(self):
+    def test_invalid_patch_update_student(self):
         """Updates a student with invalid data"""
         data = {
             "first_name": ""
         }
         response = self.client.patch(
+            f'/students/{self.john.pk}/', data, format='json', content_type='application/json')
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_valid_put_update_student_with_subject(self):
+        """Updates a student with valid data"""
+        data = {
+            "first_name": "John",
+            "last_name": "Doe",
+            "registration_number": "ABC1234",
+            "subjects": [self.math.pk]
+        }
+        response = self.client.put(
+            f'/students/{self.john.pk}/', data, format='json', content_type='application/json')
+
+        student_obj = Student.objects.get(id=self.john.pk)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(student_obj.first_name, "John")
+
+    def test_valid_put_update_student_without_subject(self):
+        """Updates a student with valid data"""
+        data = {
+            "first_name": "Johnny",
+            "last_name": "Doe",
+            "registration_number": "ABC1234",
+        }
+        response = self.client.put(
+            f'/students/{self.john.pk}/', data, format='json', content_type='application/json')
+
+        student_obj = Student.objects.get(id=self.john.pk)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(student_obj.first_name, "Johnny")
+
+    def test_invalid_put_update_student(self):
+        """Updates a student with invalid data"""
+        data = {
+            "first_name": "",
+            "last_name": "Doe",
+            "registration_number": "ABC1234",
+        }
+        response = self.client.put(
             f'/students/{self.john.pk}/', data, format='json', content_type='application/json')
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 

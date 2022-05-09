@@ -72,7 +72,7 @@ class UpdateSubjectTestCase(TestCase):
     def setUp(self):
         self.math = Subject.objects.create(name="Math")
 
-    def test_valid_update_subject(self):
+    def test_valid_patch_update_subject(self):
         """Updates a subject with valid data"""
         data = {
             "name": "Mathematics"
@@ -84,12 +84,33 @@ class UpdateSubjectTestCase(TestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(subject_obj.name, "Mathematics")
 
-    def test_invalid_update_subject(self):
+    def test_invalid_patch_update_subject(self):
         """Updates a subject with invalid data"""
         data = {
             "name": ""
         }
         response = self.client.patch(
+            f'/subjects/{self.math.pk}/', data, format='json', content_type='application/json')
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_valid_put_update_subject(self):
+        """Updates a subject with valid data"""
+        data = {
+            "name": "Mathematics"
+        }
+        response = self.client.put(
+            f'/subjects/{self.math.pk}/', data, format='json', content_type='application/json')
+
+        subject_obj = Subject.objects.get(id=self.math.pk)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(subject_obj.name, "Mathematics")
+
+    def test_invalid_put_update_subject(self):
+        """Updates a subject with invalid data"""
+        data = {
+            "name": ""
+        }
+        response = self.client.put(
             f'/subjects/{self.math.pk}/', data, format='json', content_type='application/json')
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
