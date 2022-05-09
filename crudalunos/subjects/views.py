@@ -9,7 +9,8 @@ from django.db.models import Q
 from .models import Subject
 from .serializers import SubjectSerializer
 
+
 class SubjectViewSet(viewsets.ModelViewSet):
     """" Subjects endpoints """
-    queryset = Subject.objects.all()
+    queryset = Subject.objects.all().order_by('id')
     serializer_class = SubjectSerializer
