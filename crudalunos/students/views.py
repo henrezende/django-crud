@@ -13,7 +13,7 @@ class StudentViewSet(viewsets.ModelViewSet):  # pylint: disable=too-many-ancesto
     queryset = Student.objects.all().order_by('id')
 
     def get_serializer_class(self):
-        if self.action == 'create' or self.action == 'update':
+        if self.action in ('create', 'update'):
             return StudentCreateOrUpdateSerializer
         return StudentSerializer
 

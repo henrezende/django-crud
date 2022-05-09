@@ -1,5 +1,4 @@
 """" This will turn the Student models into a JSON representation"""
-from crudalunos.subjects.models import Subject
 from rest_framework import serializers
 from crudalunos.subjects.serializers import SubjectSerializer
 from .models import Student
